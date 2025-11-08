@@ -8,13 +8,13 @@ from database.models.account import Account
 
 client = TestClient(api)
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="function")
 def db_session():
     session = get_session()
     yield session
     session.rollback()
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="function")
 def test_bank(db_session):
     bank = Bank(name="Test Bank")
     db_session.add(bank)
@@ -22,7 +22,7 @@ def test_bank(db_session):
     db_session.refresh(bank)
     return bank
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="function")
 def test_client(db_session, test_bank):
     client_obj = Client(firstname="John", lastname="Doe", city="New York", salary=50000.0, initial_deposit=0, bank_id=test_bank.id)
     db_session.add(client_obj)

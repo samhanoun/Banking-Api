@@ -1,7 +1,10 @@
 #!/bin/bash
 
-# Get the image name from the GitHub repository name
-IMAGE_NAME=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')
+# Check if the IMAGE_NAME environment variable is set
+if [ -z "$IMAGE_NAME" ]; then
+  echo "Error: IMAGE_NAME environment variable is not set."
+  exit 1
+fi
 
 # Pull the latest image from Docker Hub
 docker pull $IMAGE_NAME:latest

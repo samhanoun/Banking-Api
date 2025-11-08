@@ -7,13 +7,13 @@ from database.models.client import Client
 
 client = TestClient(api)
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="function")
 def db_session():
     session = get_session()
     yield session
     session.rollback()
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="function")
 def test_bank(db_session):
     bank = Bank(name="Test Bank")
     db_session.add(bank)

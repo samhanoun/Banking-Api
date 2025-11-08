@@ -14,7 +14,7 @@ To get started with the project, you'll need to have Python 3.12 and Docker inst
 
 1.  Clone the repository:
     ```bash
-    git clone https://github.com/${{ github.repository }}.git
+    git clone https://github.com/your-username/your-repo-name.git
     ```
 2.  Install the dependencies:
     ```bash
@@ -29,13 +29,17 @@ To get started with the project, you'll need to have Python 3.12 and Docker inst
 
 You can also run the application with Docker:
 
-1.  Build the Docker image:
+1.  Set the `IMAGE_NAME` environment variable:
     ```bash
-    docker build -t ${{ github.repository }}:latest .
+    export IMAGE_NAME=your-docker-hub-username/your-repo-name
     ```
-2.  Run the Docker container:
+2.  Build the Docker image:
     ```bash
-    docker run -d -p 80:80 --name ${{ github.repository }} ${{ github.repository }}:latest
+    docker build -t $IMAGE_NAME:latest .
+    ```
+3.  Run the Docker container:
+    ```bash
+    docker run -d -p 80:80 --name $IMAGE_NAME $IMAGE_NAME:latest
     ```
 
 ## API Guide
@@ -98,6 +102,11 @@ To run the CD pipeline, you'll need to set up a self-hosted runner on your WSL e
 
 To deploy the application, you can use the `deploy.sh` script. This script will pull the latest image from the container registry and run it as a Docker container.
 
-```bash
-./deploy.sh
-```
+1.  Set the `IMAGE_NAME` environment variable:
+    ```bash
+    export IMAGE_NAME=your-docker-hub-username/your-repo-name
+    ```
+2.  Run the deployment script:
+    ```bash
+    ./deploy.sh
+    ```
