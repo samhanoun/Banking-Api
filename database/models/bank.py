@@ -3,9 +3,8 @@ from typing import TYPE_CHECKING
 
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship, Mapped, mapped_column
-from database import Base
+from database.base import Base
 from database.models.credit_card import CreditCard
-from database.models.exceptions import ClientNotFoundException
 
 
 if TYPE_CHECKING:

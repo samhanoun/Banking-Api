@@ -3,7 +3,7 @@ from random import randint
 from sqlalchemy import Column, Float, ForeignKey, Integer
 from sqlalchemy.orm import relationship
 
-from database import Base
+from database.base import Base
 
 
 class Account(Base):
@@ -18,6 +18,7 @@ class Account(Base):
 
     client = relationship('Client', back_populates= 'account')
     credit_card = relationship('CreditCard', back_populates= 'account')
+    transactions = relationship('Transaction', back_populates='account', cascade="all, delete-orphan")
 
 
     def __init__(self, initial_deposit: float):
