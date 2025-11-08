@@ -41,6 +41,9 @@ def request_cb(bank_id: int, client_id: int, db: Session = Depends(get_session))
     if not client:
         raise HTTPException(status_code=404, detail="Client not found")
 
+    if client.bank_id != bank_id:
+        raise HTTPException(status_code=403, detail="Client does not belong to this bank")
+
     cb = bank.request_cb(client)
     db.add(cb)
     db.commit()

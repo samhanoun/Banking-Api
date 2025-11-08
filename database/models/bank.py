@@ -26,8 +26,6 @@ class Bank(Base):
         self.clients.append(client)
 
     def request_cb(self, client: 'Client'):
-        if client not in self.clients:
-            raise ClientNotFoundException(client)
         cb = CreditCard(client.account)
         return cb
     
