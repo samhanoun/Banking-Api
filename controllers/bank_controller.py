@@ -5,6 +5,9 @@ from repositories.bank_repository import BankRepository
 repository = BankRepository()
 
 def create_new_bank(data: CreateBankDTO) -> ResponseCreateBankDTO:
+    """
+    Create a new bank.
+    """
     existing_bank = repository.find_by_name(data.name)
     if existing_bank is not None:
         raise Exception(f"La banque '{data.name}' existe deja")
@@ -16,5 +19,8 @@ def create_new_bank(data: CreateBankDTO) -> ResponseCreateBankDTO:
     }
 
 def get_all_banks():
+    """
+    Get all banks.
+    """
     banks = repository.fetch_all()
     return [str(bank) for bank in banks]

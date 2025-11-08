@@ -1,52 +1,26 @@
 """
-On veut gerer des banques
-Une banque a un nom et une liste de clients
-Un client a un nom prenom ville salaire comme attributs
-Une banque peut ajouter un client, ce qui va creer automatiquement son compte
-Un compte a un numero de 7 digits et un solde initial a 0, on peut retirer et deposer de l'argent sur le compte.
-Une banque peut faire la demande d'une CB pour le compte d'un client
-Une CB a un numero de 16 chiffres (XXXX XXXX XXXX XXXX) a un CVV de 3 chiffres (XXX) et une date d'expiration 5 ans apres la date de creation (MM/YY)
+This is the main file of the application.
+It contains the FastAPI application and the routes.
 """
 from fastapi import FastAPI
-from fastapi.responses import JSONResponse
-
 from database.connection import get_session
-from database.models.bank import Bank
-from database.models.client import Client
-from dtos.client_dto import CreateClientDTO
-from routes import bank_routes
+from routes import bank_routes, client_routes, account_routes
 
-api = FastAPI()
+api = FastAPI(
+    title="Banking API",
+    description="A simple API to manage banks, clients, and accounts.",
+    version="1.0.0",
+)
+
 session = get_session()
 
-api.include_router(bank_routes.router)
+api.include_router(bank_routes.router, prefix="/api")
+api.include_router(client_routes.router, prefix="/api")
+api.include_router(account_routes.router, prefix="/api")
 
-@api.get('/')
-async def root():
-    return JSONResponse('Hello world', 201)
-
-@api.post('/client/new/{bank_id}')
-async def create_client(bank_id: int, data: CreateClientDTO):
-    bank = session.query(Bank).filter_by(id= bank_id).first()
-    if bank is None:
-        return JSONResponse({"message": f"La banque avec l'ID '{bank_id}' n'existe pas"}, 404)
-    client = Client(**data.model_dump())
-    bank.register(client)
-    session.add(client)
-    session.commit()
-    return JSONResponse({'id': client.id}, 201)
-
-# Bank fait une requete de cb pour un client, l'api retourne les infos de la CB
-@api.post('/bank/{bank_id}/request/{client_id}')
-async def request_cb(bank_id: int, client_id: int):
-    bank = session.query(Bank).filter_by(id= bank_id).first()
-    if bank is None:
-        return JSONResponse({"message": f"La banque avec l'ID '{bank_id}' n'existe pas"}, 404)
-    client = session.query(Client).filter_by(id= client_id).first()
-    if client is None:
-        return JSONResponse({"message": f"Le client avec l'ID '{client_id}' n'existe pas"}, 404)
-    
-    cb = bank.request_cb(client)
-    session.add(cb)
-    session.commit()
-    return JSONResponse({'cb': str(cb)}, 201)
+@api.get("/")
+def read_root():
+    """
+    Root endpoint of the API.
+    """
+    return {"message": "Welcome to the Banking API"}

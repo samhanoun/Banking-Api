@@ -3,9 +3,8 @@ from typing import TYPE_CHECKING
 
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship, Mapped, mapped_column
-from database import Base
+from database.base import Base
 from database.models.credit_card import CreditCard
-from database.models.exceptions import ClientNotFoundException
 
 
 if TYPE_CHECKING:
@@ -27,8 +26,6 @@ class Bank(Base):
         self.clients.append(client)
 
     def request_cb(self, client: 'Client'):
-        if client not in self.clients:
-            raise ClientNotFoundException(client)
         cb = CreditCard(client.account)
         return cb
     

@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 from dateutil.relativedelta import relativedelta
 from sqlalchemy import CHAR, Column, Integer, String
 from sqlalchemy.orm import relationship
-from database import Base
+from database.base import Base
 
 if TYPE_CHECKING:
     from database.models.account import Account
